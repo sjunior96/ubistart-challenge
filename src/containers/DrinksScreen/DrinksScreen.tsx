@@ -1,12 +1,11 @@
 import React, { useEffect } from "react";
 import { useParams } from "react-router";
-import { IDrink } from "../../interfaces";
 import { useCocktails } from '../../context/cocktails/CocktailsContext';
 import history from "../../history";
-import "./DrinksScreen.css";
 import AppContainer from "../../components/AppContainer/AppContainer";
 import DrinksImageList from "../../components/DrinkCard/DrinkCard";
 import { Button } from "@mui/material";
+import { getDrinks } from "../../services/services";
 
 export default function DrinksScreen() {
     let { strCategory } = useParams<{ strCategory: string; }>();
@@ -33,15 +32,4 @@ export default function DrinksScreen() {
             />
         </AppContainer>
     );
-}
-
-function getDrinks(strCategory: string): Promise<IDrink[]> {
-    return fetch(`https://www.thecocktaildb.com/api/json/v1/1/filter.php?c=${strCategory.replaceAll(",", "/")}`)
-        .then((response) => {
-            return response
-                .json()
-                .then((responseJSON) => {
-                    return responseJSON.drinks;
-                });
-        });
 }

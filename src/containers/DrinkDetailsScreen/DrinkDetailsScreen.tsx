@@ -1,14 +1,18 @@
 import React, { useEffect } from "react";
 import { useParams } from "react-router";
-import { IDrinkDetails } from "../../interfaces";
 import { useCocktails } from '../../context/cocktails/CocktailsContext';
-import MediaControlCard from "../../components/DrinkDetails/DrinkDetails";
 import AppContainer from "../../components/AppContainer/AppContainer";
 import { Button } from "@mui/material";
 import history from "../../history";
+import { getDrinkDetails } from "../../services/services";
+import DrinkDetails from "../../components/DrinkDetails/DrinkDetails";
+
+interface IUseParams {
+    idDrink: string;
+}
 
 export default function DrinkDetailsScreen() {
-    const { idDrink } = useParams<{ idDrink: string; }>();
+    const { idDrink } = useParams<IUseParams>();
     const { drinkDetails, setDrinkDetails } = useCocktails();
 
     useEffect(() => {
@@ -26,21 +30,10 @@ export default function DrinkDetailsScreen() {
                 Back to Drinks
             </Button>
             {drinkDetails.map((details) => (
-                <MediaControlCard
+                <DrinkDetails
                     drink={details}
                 />
             ))}
         </AppContainer>
     );
-}
-
-function getDrinkDetails(idDrink: string): Promise<IDrinkDetails[]> {
-    return fetch(`https://www.thecocktaildb.com/api/json/v1/1/lookup.php?i=${idDrink}`)
-        .then((response) => {
-            return response
-                .json()
-                .then((responseJSON) => {
-                    return responseJSON.drinks;
-                });
-        });
 }

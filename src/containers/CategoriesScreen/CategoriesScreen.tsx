@@ -1,19 +1,16 @@
 import React, { useEffect } from "react";
-import { ICategory, IDrink, IDrinkDetails, IRequestResponse } from "../../interfaces";
 import { useCocktails } from "../../context/cocktails/CocktailsContext";
 import history from "../../history";
-/* import Button from "../../components/Button/Button"; */
 import AppContainer from "../../components/AppContainer/AppContainer";
-import "./Categories.css";
 import { Button, Typography } from "@mui/material";
+import { getCategories } from "../../services/services";
+import { Box } from "@mui/system";
 
 export default function CategoriesScreen() {
     const { categories, setCategories } = useCocktails();
 
     useEffect(() => {
         getCategories().then(setCategories);
-        /* getDrinks("Ordinary Drink").then((drinks) => console.log(drinks));
-        getDrinkDetails().then((drinkDetails) => console.log(drinkDetails)); */
     }, []);
 
     return (
@@ -21,7 +18,15 @@ export default function CategoriesScreen() {
             <Typography color="#0288d1" variant="h5" component="div">
                 Please, select a drink category
             </Typography>
-            <div className="categories-list">
+            <Box sx={{
+                margin: "1rem",
+                width: "50vw",
+                display: "flex",
+                flexDirection: "row",
+                flexWrap: "wrap",
+                alignItems: "center",
+                justifyContent: "center"
+            }}>
                 {categories.map((category, index) => (
                     <Button color="info"
                         key={index}
@@ -32,40 +37,7 @@ export default function CategoriesScreen() {
                         {category.strCategory}
                     </Button>
                 ))}
-            </div>
+            </Box>
         </AppContainer>
     );
 }
-
-function getCategories(): Promise<ICategory[]> {
-    return fetch("https://www.thecocktaildb.com/api/json/v1/1/list.php?c=list")
-        .then((response) => {
-            return response
-                .json()
-                .then((responseJSON) => {
-                    return responseJSON.drinks;
-                });
-        });
-}
-
-/* function getDrinks(strCategory: string): Promise<IDrink[]> {
-    return fetch(`https://www.thecocktaildb.com/api/json/v1/1/filter.php?c=${strCategory}`)
-        .then((response) => {
-            return response
-                .json()
-                .then((responseJSON) => {
-                    return responseJSON.drinks;
-                });
-        });
-} */
-
-/* function getDrinkDetails(): Promise<IDrinkDetails[]> {
-    return fetch("https://www.thecocktaildb.com/api/json/v1/1/lookup.php?i=11007")
-        .then((response) => {
-            return response
-                .json()
-                .then((responseJSON) => {
-                    return responseJSON.drinks;
-                });
-        });
-} */
